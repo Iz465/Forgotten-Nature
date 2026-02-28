@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         ApplyMovement();
+        ApplyLooking();
         ApplyGravity();
        
     }
@@ -59,27 +60,33 @@ public class Player : MonoBehaviour
     }
 
 
-    private float yaw = 0; // y
-    private float pitch = 0;  // x
+
     public void ReadMouseInput(InputAction.CallbackContext context) // reads players mouse movement input
     {
         mouse2D = context.ReadValue<Vector2>();
 
+
+    }
+
+    private float yaw = 0; // y
+    private float pitch = 0;  // x
+    private void ApplyLooking()
+    {
+
         yaw += mouse2D.x * mouseSensitivity;
         pitch -= mouse2D.y * mouseSensitivity;
 
-        pitch = Mathf.Clamp(pitch, -60, 60); // good clamp values for first person.
+        pitch = Mathf.Clamp(pitch, -10, 60); // stops unrealistic pitch rotation
 
         if (playerCamera)
-            playerCamera.transform.localRotation = Quaternion.Euler(pitch, 0, 0); // camera rotation used here instead of player so that player does not rotate weirdly when looking up or down 
-        transform.rotation = Quaternion.Euler(0, yaw, 0); // camera is child of player therefore will follow player rotation
-
+            playerCamera.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
+        transform.rotation = Quaternion.Euler(0, yaw, 0);
     }
 
     public void ReadJumpInput(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
-        Debug.Log("Attemping jump...");
+    
         if (canJump)
         {
             verticalVelocity = jumpForce;
