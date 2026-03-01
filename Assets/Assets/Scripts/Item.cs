@@ -1,17 +1,19 @@
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class Item : MonoBehaviour
 {
     [SerializeField] public ItemStats itemStats;
-    [HideInInspector] public bool isPickedUp = false;
+    public bool isPickedUp = false; // [HideInInspector]
     private GameObject itemInstance;
-    [HideInInspector] public float itemSlotNumber; 
+    [HideInInspector] public float itemSlotNumber;
+    private InventoryUI inventoryUI;
     public void PickItemUp(Transform holdTransform, Item item)
     {
 
         bool inventoryFull = true;
-        InventoryUI inventoryUI = FindAnyObjectByType<InventoryUI>();
+        inventoryUI = FindAnyObjectByType<InventoryUI>();
 
 
 
@@ -22,65 +24,69 @@ public class Item : MonoBehaviour
             {
                 if (image.texture == inventoryUI.emptyTexture)
                 {
-                    itemInstance = Instantiate(item.itemStats.item, holdTransform.position, holdTransform.rotation);
-                    itemInstance.transform.SetParent(holdTransform, true);
-                    inventoryUI.itemsHeld[count] = itemInstance;
-                    Item specificItem = itemInstance.GetComponent<Item>();
-                    specificItem.itemSlotNumber = count;
-                    specificItem.isPickedUp = true;
-                    inventoryUI.CheckIfItemEquipped();
+                    EquipItemFunctionality(holdTransform, item, count);
                     image.texture = itemStats.icon;
                     inventoryFull = false;
-                    Debug.Log($"{itemStats.itemName} picked up");
+                  
                     break;
                 }
                 count++;
             }
 
-
-
-        
-         
-
+            // will drop the item the player is currently holding for the item on ground
             if (inventoryFull)
             {
-                int slot = inventoryUI.slotEquipped;
+                int slotNumber = inventoryUI.slotEquipped;
+                DropItemFunctionality(holdTransform, slotNumber);
+                // Item on ground is spawned into players hand & inventory
+                EquipItemFunctionality(holdTransform, item, slotNumber);
 
-                GameObject oldItem = inventoryUI.itemsHeld[slot];
+                inventoryUI.images[slotNumber].texture = itemStats.icon;
 
-                if (oldItem != null)
-                {
-                    // Drop the old item
-                    oldItem.transform.SetParent(null);
-                    oldItem.transform.position = holdTransform.position + holdTransform.forward;
-                    oldItem.SetActive(true);
-                    
-                    Item oldItemComponent = oldItem.GetComponent<Item>();
-                    oldItemComponent.isPickedUp = false;
-                    oldItem.layer = 7;
-                }
 
-                // Spawn the new item into that slot
-                itemInstance = Instantiate(item.itemStats.item, holdTransform.position, holdTransform.rotation);
-                itemInstance.transform.SetParent(holdTransform, true);
-
-                inventoryUI.itemsHeld[slot] = itemInstance;
-
-                Item newItemComponent = itemInstance.GetComponent<Item>();
-                newItemComponent.itemSlotNumber = slot;
-                newItemComponent.isPickedUp = true;
-
-                inventoryUI.images[slot].texture = itemStats.icon;
-
-                inventoryUI.CheckIfItemEquipped();
-
-                Destroy(item.gameObject); // remove pickup object from world
+            
 
             }
 
-          
             Destroy(item.gameObject);
       
         }
+    }
+
+
+    
+    private void EquipItemFunctionality(Transform holdTransform, Item item, int slotNumber)
+    {
+        itemInstance = Instantiate(item.itemStats.item, holdTransform.position, holdTransform.rotation);
+        itemInstance.transform.SetParent(holdTransform, true);
+        inventoryUI.itemsInInventory[slotNumber] = itemInstance;
+        Item newItemComponent = itemInstance.GetComponent<Item>();
+        newItemComponent.itemSlotNumber = slotNumber;
+        newItemComponent.isPickedUp = true;
+        inventoryUI.CheckIfItemEquipped();
+        
+    }
+
+    public void DropItemFunctionality(Transform holdTransform, int slotNumber)
+    {
+        
+
+        GameObject oldItem = inventoryUI.itemsInInventory[slotNumber]; // references the item player is currently holding
+
+        if (oldItem != null)
+        {
+            // drops item player is holding and removes it as child of player
+            oldItem.transform.SetParent(null);
+            oldItem.transform.position = holdTransform.position + holdTransform.forward;
+           
+
+
+            Item oldItemComponent = oldItem.GetComponent<Item>();
+            oldItemComponent.isPickedUp = false;
+            oldItem.layer = 7;
+            Rigidbody rb = oldItem.AddComponent<Rigidbody>();
+            rb.useGravity = true;
+        }
+
     }
 }

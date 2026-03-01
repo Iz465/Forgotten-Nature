@@ -108,55 +108,5 @@ public class Player : MonoBehaviour
         verticalVelocity += gravity * Time.deltaTime;
     }
 
-    [SerializeField] private LayerMask interactableLayer;
-
-    [SerializeField] private Transform holdTransform;
-
-    public void ReadInteractInput(InputAction.CallbackContext context)
-    {
-        if (!context.performed) return;
-        Vector3 endLocation = playerCamera.transform.position + playerCamera.transform.forward * 5;
-        Vector3 boxSize = new Vector3(2, 2, 5);
-        Vector3 boxCenter = (playerCamera.transform.position + endLocation) / 2;
-        Quaternion boxRotation = playerCamera.transform.rotation;
-
-        Collider[] hits = Physics.OverlapBox(boxCenter, boxSize / 2, boxRotation, interactableLayer);
-
-        if (hits.Length > 0)
-        {
-            Item item = hits[0].gameObject.GetComponent<Item>();
-
-            Player playerCheck = item.GetComponentInParent<Player>();
-            if (playerCheck == null)
-                item.PickItemUp(holdTransform, item);
-
-            else
-                Debug.Log($"Not interactable. Reason: item picked up = {item.isPickedUp}");
-
-
-
-
-
-        }
-
-
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.purple;
-        Vector3 endLocation = playerCamera.transform.position + playerCamera.transform.forward * 5;
-        Vector3 boxSize = new Vector3(2, 2, 5);
-        Vector3 boxCenter = (playerCamera.transform.position + endLocation) / 2;
-        Quaternion boxRotation = playerCamera.transform.rotation;
-
-        Gizmos.matrix = Matrix4x4.TRS(boxCenter, boxRotation, Vector3.one);
-        Gizmos.DrawWireCube(Vector3.zero, boxSize);
-
-        Gizmos.matrix = Matrix4x4.identity;
-        
-
-      
-    }
+  
 }
-//  Gizmos.DrawLine(playerCamera.transform.position, endLocation);
