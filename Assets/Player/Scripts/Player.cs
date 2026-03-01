@@ -111,6 +111,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask interactableLayer;
 
     [SerializeField] private Transform holdTransform;
+
     public void ReadInteractInput(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
@@ -125,11 +126,17 @@ public class Player : MonoBehaviour
         {
             Item item = hits[0].gameObject.GetComponent<Item>();
 
-            if (item)
+            Player playerCheck = item.GetComponentInParent<Player>();
+            if (playerCheck == null)
                 item.PickItemUp(holdTransform, item);
 
             else
-                Debug.Log("Not interactable");
+                Debug.Log($"Not interactable. Reason: item picked up = {item.isPickedUp}");
+
+
+
+
+
         }
 
 

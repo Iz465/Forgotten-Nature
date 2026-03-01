@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InventoryUI : MonoBehaviour
 {
     [SerializeField] public RawImage[] images;
+    [HideInInspector] public GameObject[] itemsHeld = new GameObject[5];
     [SerializeField] public Texture2D emptyTexture;
     [HideInInspector] public int slotEquipped = 0;
 
@@ -19,18 +20,24 @@ public class InventoryUI : MonoBehaviour
 
     public void ShowEquippedItem(int slot)
     {
+        slotEquipped = slot;
+
         foreach (var image in images)
         {
+    
             Outline outline = image.GetComponentInParent<Outline>();
-            if (!outline) return;
+            
 
             if (image == images[slot])
+            {
                 outline.enabled = true;
+            }
+               
             else 
                 outline.enabled = false;
         }
 
-        slotEquipped = slot;
+        CheckIfItemEquipped();
     }
 
     public void DropItem()
@@ -47,5 +54,19 @@ public class InventoryUI : MonoBehaviour
         }
     }
     
+    public void CheckIfItemEquipped() // only shows the equipped item. items in inventory not equipped will be hidden.
+    {
+        for (int i = 0; i < itemsHeld.Length; i++)
+        {
+            if (itemsHeld[i] == null) continue;
+
+            if (i == slotEquipped)
+                itemsHeld[i].SetActive(true);
+            
+            else itemsHeld[i].SetActive(false);
+        }
+        
+    }
+  
 
 }

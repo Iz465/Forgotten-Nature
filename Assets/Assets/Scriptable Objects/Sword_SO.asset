@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Sword_SO
   m_EditorClassIdentifier: Assembly-CSharp::ItemStats
   itemName: Sword
-  item: {fileID: 0}
+  item: {fileID: 723498003008074342, guid: 5d03aa32639c4e547a63d67cd0f3c988, type: 3}
   weight: 54
   icon: {fileID: 2800000, guid: bc5fb31e68c007c4cb20d39bc8c934ac, type: 3}
