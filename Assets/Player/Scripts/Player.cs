@@ -51,9 +51,10 @@ public class Player : MonoBehaviour
             if (movement2D != Vector2.zero) animator.SetBool("canRun", true);
             else animator.SetBool("canRun", false);
         }
-  
-            
-       
+        else
+            Debug.Log("No animator");
+
+
         if (controller)
             controller.Move(movementRotation * movementSpeed * Time.deltaTime); 
 
@@ -103,6 +104,8 @@ public class Player : MonoBehaviour
         if (Physics.Linecast(footLocation.position, endLocation, groundLayer))
         {
             canJump = true;
+            if (verticalVelocity < 0)
+                verticalVelocity = -2f; 
         }
 
         verticalVelocity += gravity * Time.deltaTime;

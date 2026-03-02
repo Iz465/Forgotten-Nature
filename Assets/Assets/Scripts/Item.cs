@@ -5,10 +5,12 @@ using static UnityEditor.Progress;
 public class Item : MonoBehaviour
 {
     [SerializeField] public ItemStats itemStats;
-    public bool isPickedUp = false; // [HideInInspector]
+    [HideInInspector]public bool isPickedUp = false; 
     private GameObject itemInstance;
     [HideInInspector] public float itemSlotNumber;
     private InventoryUI inventoryUI;
+    public Vector3 itemLocation;
+    public Quaternion itemRotation;
     public void PickItemUp(Transform holdTransform, Item item)
     {
 
@@ -63,6 +65,8 @@ public class Item : MonoBehaviour
         Item newItemComponent = itemInstance.GetComponent<Item>();
         newItemComponent.itemSlotNumber = slotNumber;
         newItemComponent.isPickedUp = true;
+        newItemComponent.transform.localPosition = newItemComponent.itemLocation;
+        newItemComponent.transform.localRotation = newItemComponent.itemRotation;
         inventoryUI.CheckIfItemEquipped();
         
     }
