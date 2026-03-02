@@ -1,7 +1,9 @@
 using JetBrains.Annotations;
 using NUnit.Framework;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -9,7 +11,8 @@ public class InventoryUI : MonoBehaviour
     [HideInInspector] public GameObject[] itemsInInventory = new GameObject[5];
     [SerializeField] public Texture2D emptyTexture;
     [HideInInspector] public int slotEquipped = 0;
-    PlayerInventory playerInventory;
+    private PlayerInventory playerInventory;
+    private UseItem useItem;
     private void Start()
     {
         foreach (var image in images)
@@ -18,11 +21,15 @@ public class InventoryUI : MonoBehaviour
         }
 
         playerInventory = FindFirstObjectByType<PlayerInventory>();
+        useItem = FindFirstObjectByType<UseItem>();
     }
 
     public void ShowEquippedItem(int slot)
     {
         slotEquipped = slot;
+
+        if (useItem.toolUsed) return; // cant equip/switch items while a tool animation is being used.
+
 
         foreach (var image in images)
         {
@@ -70,14 +77,35 @@ public class InventoryUI : MonoBehaviour
     
     public void CheckIfItemEquipped() // only shows the equipped item. items in inventory not equipped will be hidden.
     {
+        
         for (int i = 0; i < itemsInInventory.Length; i++)
         {
-            if (itemsInInventory[i] == null) continue;
+            if (itemsInInventory[i] == null)
+            {
+                if (i != slotEquipped) continue;
+                Debug.Log("Nothing equipped");
+                useItem.itemID = 0;
+              
+               
+            }
 
             if (i == slotEquipped)
+            {
+              
                 itemsInInventory[i].SetActive(true);
+                Item item = itemsInInventory[i].GetComponent<Item>();
+                if (item)
+                {
+                    Debug.Log($"Item equipped is: {item.itemStats.itemName}");
+                    useItem.itemID = item.itemStats.id;
+                }
+               
             
-            else itemsInInventory[i].SetActive(false);
+            }
+       
+            
+            else 
+                itemsInInventory[i].SetActive(false);
         }
         
     }

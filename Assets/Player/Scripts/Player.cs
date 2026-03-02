@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -77,13 +78,14 @@ public class Player : MonoBehaviour
         yaw += mouse2D.x * mouseSensitivity;
         pitch -= mouse2D.y * mouseSensitivity;
 
-        pitch = Mathf.Clamp(pitch, -10, 60); // stops unrealistic pitch rotation
+        pitch = Mathf.Clamp(pitch, 0, 50); // stops unrealistic pitch rotation
 
         if (playerCamera)
             playerCamera.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
         transform.rotation = Quaternion.Euler(0, yaw, 0);
     }
 
+    private bool jumpDelayDone;
     public void ReadJumpInput(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
@@ -92,6 +94,8 @@ public class Player : MonoBehaviour
         {
             verticalVelocity = jumpForce;
             canJump = false;
+            jumpDelayDone = false;
+            StartCoroutine(JumpDelayTimer(0.5f));
         }
         
     }
@@ -103,7 +107,7 @@ public class Player : MonoBehaviour
         Vector3 endLocation = footLocation.position + Vector3.down * .2f;
         if (Physics.Linecast(footLocation.position, endLocation, groundLayer))
         {
-            canJump = true;
+            if (jumpDelayDone) canJump = true;
             if (verticalVelocity < 0)
                 verticalVelocity = -2f; 
         }
@@ -111,5 +115,11 @@ public class Player : MonoBehaviour
         verticalVelocity += gravity * Time.deltaTime;
     }
 
+    private IEnumerator JumpDelayTimer(float timer)
+    {
+        yield return new WaitForSeconds(timer);
+        jumpDelayDone = true;
+
+    }
   
 }

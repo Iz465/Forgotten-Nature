@@ -16,3 +16,4 @@ MonoBehaviour:
   item: {fileID: 4221052848543436510, guid: a90e894e63a25e74080387046dee0931, type: 3}
   weight: 54
   icon: {fileID: 2800000, guid: 4e209f056c591de4eb166ddee9a392f5, type: 3}
+  id: 1

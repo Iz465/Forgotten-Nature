@@ -8,5 +8,6 @@ public class ItemStats : ScriptableObject
     [SerializeField] public GameObject item;
     [SerializeField] public float weight;
     [SerializeField] public Texture2D icon;
+    public int id; 
 
 }
