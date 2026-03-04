@@ -46,7 +46,8 @@ public class InventoryUI : MonoBehaviour
                 outline.enabled = false;
         }
 
-        CheckIfItemEquipped();
+        if (itemsInInventory != null) // no point checking if nothing in inventory
+            CheckIfItemEquipped();
     }
 
     public void DropItem()
@@ -91,7 +92,7 @@ public class InventoryUI : MonoBehaviour
 
             if (i == slotEquipped)
             {
-              
+                if (itemsInInventory[i] == null) continue;
                 itemsInInventory[i].SetActive(true);
                 Item item = itemsInInventory[i].GetComponent<Item>();
                 if (item)

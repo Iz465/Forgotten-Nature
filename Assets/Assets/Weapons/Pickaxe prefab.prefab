@@ -63,7 +63,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 3c9671245fd94ab43b2f5fb7a76a0633, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: c2a4285582e339c41a2a215cbf206773, type: 2}
+      objectReference: {fileID: -1580535799172915004, guid: fb0473fafe3feb54cbe533b25d99a6ae, type: 3}
     - target: {fileID: 919132149155446097, guid: 3c9671245fd94ab43b2f5fb7a76a0633, type: 3}
       propertyPath: m_Name
       value: Pickaxe prefab
@@ -125,5 +125,8 @@ MonoBehaviour:
   itemStats: {fileID: 11400000, guid: 638276af4c8917f4ab2dd2ea703a4352, type: 2}
   isPickedUp: 0
   itemSlotNumber: 0
-  itemLocation: {x: -0.4060237, y: -0.08429054, z: -0.05229236}
-  itemRotation: {x: 0.5097747, y: -0.3819421, z: 0.40789723, w: -0.6541176}
+  itemLocation: {x: -0.3015091, y: 0.1967811, z: 0.01883401}
+  itemRotation: {x: 0.5321389, y: -0.46497524, z: 0.6561927, w: -0.26464584}
+  rockLayer:
+    serializedVersion: 2
+    m_Bits: 256

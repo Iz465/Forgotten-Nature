@@ -9,21 +9,15 @@ public class UseItem : MonoBehaviour
 
     private void Update()
     {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") ||
-            animator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
+
+        if (animator.GetCurrentAnimatorStateInfo(1).IsName("Empty"))
         {
             toolUsed = false;
-            Debug.Log("Moving");
+  
         }
 
-        else if (animator.GetCurrentAnimatorStateInfo(1).IsName("Empty"))
-        {
-            Debug.Log("Tool layer is empty");
-            animator.SetBool("ToolUsed", false);
-        }
-            
-      
-        else Debug.Log("Using tool");
+        else toolUsed = true;
+        
 
         
     }
@@ -32,10 +26,8 @@ public class UseItem : MonoBehaviour
         if (!context.performed) return;
 
         animator.SetInteger("Tool State", itemID);
-        if (itemID != 0) animator.SetBool("ToolUsed", true);
-        else animator.SetBool("ToolUsed", false);
+       
 
-        toolUsed = animator.GetBool("ToolUsed");
 
         switch (itemID)
         {
@@ -47,6 +39,8 @@ public class UseItem : MonoBehaviour
 
 
     }
+
+
 
 
 }

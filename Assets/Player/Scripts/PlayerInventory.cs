@@ -55,9 +55,10 @@ public class PlayerInventory : MonoBehaviour
     {
         if (!context.performed) return;
 
+        Vector3 startLocation = playerCamera.transform.position + playerCamera.transform.forward * 2;
         Vector3 endLocation = playerCamera.transform.position + playerCamera.transform.forward * 5;
         Vector3 boxSize = new Vector3(2, 2, 5);
-        Vector3 boxCenter = (playerCamera.transform.position + endLocation) / 2;
+        Vector3 boxCenter = (startLocation + endLocation) / 2;
         Quaternion boxRotation = playerCamera.transform.rotation;
 
         Collider[] hits = Physics.OverlapBox(boxCenter, boxSize / 2, boxRotation, interactableLayer);
@@ -91,9 +92,10 @@ public class PlayerInventory : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.purple;
+        Vector3 startLocation = playerCamera.transform.position + playerCamera.transform.forward * 2;
         Vector3 endLocation = playerCamera.transform.position + playerCamera.transform.forward * 5;
         Vector3 boxSize = new Vector3(2, 2, 5);
-        Vector3 boxCenter = (playerCamera.transform.position + endLocation) / 2;
+        Vector3 boxCenter = (startLocation + endLocation) / 2;
         Quaternion boxRotation = playerCamera.transform.rotation;
 
         Gizmos.matrix = Matrix4x4.TRS(boxCenter, boxRotation, Vector3.one);

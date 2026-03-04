@@ -18,17 +18,30 @@ public class Player : MonoBehaviour
     private float verticalVelocity = -2f;
     private bool canJump = true;
 
+    private float startSpeed;
+    private UseItem useItem;
+    [SerializeField] private float attackingSpeed;
     private void Update()
     {
         ApplyMovement();
         ApplyLooking();
         ApplyGravity();
        
+        if (useItem)
+        {
+            if (useItem.toolUsed) movementSpeed = attackingSpeed;
+            else movementSpeed = startSpeed;
+        }
+
+
     }
 
     private void Start()
     {
         controller = GetComponent<CharacterController>();
+        Cursor.lockState = CursorLockMode.Locked; // hides cursor and locks it to center 
+        startSpeed = movementSpeed;
+        useItem = GetComponent<UseItem>();
     }
 
     public void ReadMovementInput(InputAction.CallbackContext context) // reads players movement direction input
